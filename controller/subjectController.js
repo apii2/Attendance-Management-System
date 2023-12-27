@@ -1,0 +1,1 @@
+exports.create = require('../function/subject/create');
