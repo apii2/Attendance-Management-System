@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const create = async(req,res) =>{
   try{
     const {name,code,courseId,userId,semisterId} = req.body;
+    
     if(!name || !code || !courseId || !userId || !semisterId) {
       return res.status(404).json({message: "Invalid data!"});
     }
@@ -21,8 +22,6 @@ const create = async(req,res) =>{
     console.log(error);
     return res.status(500).json({message: "Internal Server Error!"});
   }
-  
-
 }
 
 module.exports = create;

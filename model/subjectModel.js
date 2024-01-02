@@ -10,14 +10,15 @@ const subjectSchema = new Schema({
     ref: 'User',
     validate: {
       validator: async function (value) {
-        // Check if the user with the provided id exists and has the role 'teacher'
         const user = await mongoose.model('User').findById(value);
         return user && user.role === 'teacher';
       },
       message: 'Invalid teacher id or user is not a teacher.',
     },
   },
-  semister:{ type:Schema.Types.ObjectId, ref:"Semister"}
+  semister:{ type:Schema.Types.ObjectId, ref:"Semister"},
+  startTime:{type:Date},
+  endTime:{type:Date}
 });
 
 const Subject = mongoose.model('Subject', subjectSchema);

@@ -1,43 +1,62 @@
 const jwt = require("jsonwebtoken");
-let User = require("../../model/userModel");
+const User = require("../../model/userModel");
 
-const refreshToken = async (req, res) => {
-  const { token, refreshToken } = req.body;
+const refreshJwt = async (req, res) => {
+  const { refreshToken } = req.body;
 
   try {
-    // Decode the token to get user ID
-    const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-    const userId = decodedToken.userId;
+    // Verify the refresh token to check its validity and extract the user ID and user-agent
+    const decodedRefreshToken = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
-    // Find the user by user ID
-    const foundUser = await User.findById(userId);
-
-    if (!foundUser) {
-      // User not found
-      return res.status(401).json({ error: "Invalid credentials." });
-    }
-
-    // Verify if the provided refresh token matches the stored refresh token
-    if (refreshToken !== foundUser.refreshToken) {
+    // Check if the decoded refresh token contains the userId and user-agent
+    if (!decodedRefreshToken.userId || !decodedRefreshToken.userAgent) {
       return res.status(401).json({ error: "Invalid refresh token." });
     }
 
-    // At this point, the refresh token is valid
+    // Fetch the user from the database based on the userId in the refresh token
+    const user = await User.findById(decodedRefreshToken.userId);
 
-    // Generate new access and refresh tokens
-    const newAccessToken = jwt.sign({ userId: foundUser._id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRATION });
-    const newRefreshToken = jwt.sign({ userId: foundUser._id }, process.env.REFRESH_TOKEN_SECRET);
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
 
-    // Update the user's refresh token in the database
-    foundUser.refreshToken = newRefreshToken;
-    await foundUser.save();
+    // Check if the provided refresh token matches the one stored in the database
+    if (refreshToken !== user.refreshToken) {
+      return res.status(401).json({ error: "Invalid refresh token." });
+    }
 
-    // Return the new tokens
-    return res.status(200).json({ accessToken: newAccessToken, refreshToken: newRefreshToken });
+    // Check if the refresh token has expired
+    if (decodedRefreshToken.exp * 1000 < Date.now()) {
+      return res.status(401).json({ error: "Refresh token has expired. Please login again." });
+    }
+
+    // Generate a new access token with the user's data
+    const { _id, username, email, role } = user;
+    const payload = {
+      userId: _id,
+      username,
+      email,
+      role,
+      userAgent: req.headers["user-agent"], // Use the updated user-agent from the current request
+      ipAddress: req.ip, // Use the updated IP address from the current request
+    };
+    const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+      expiresIn: process.env.ACCESS_TOKEN_EXPIRATION, // Set the access token expiration time
+    });
+
+    // Generate a new refreshToken with no expiration
+    const newRefreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET);
+
+    // Save the new refreshToken to the user's refreshToken field in the database
+    user.refreshToken = newRefreshToken;
+    await user.save();
+
+    // Return the new access token and refreshToken to the client
+    res.status(200).json({ accessToken, refreshToken: newRefreshToken });
   } catch (error) {
-    console.error("Error refreshing tokens:", error);
-    return res.status(500).json({ error: "Internal server error." });
+    console.error("Error refreshing access token:", error);
+    res.status(500).json({ error: "Internal server error." });
   }
 };
 
-module.exports = refreshToken;
+module.exports = refreshJwt;

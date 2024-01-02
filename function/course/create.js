@@ -4,8 +4,9 @@ const mongoose= require('mongoose');
 const create = async(req, res) => {
   try {
     const {facultyId,courseName,courseCode}=req.body;
+    
     if(!facultyId || !courseName || !courseCode){
-    return res.status(500).json({ message: "Please provide the faculty,name and code of the course!" });
+    return res.status(404).json({ message: "Please provide the faculty,name and code of the course!" });
     }
 
     const faculty = new mongoose.Types.ObjectId(facultyId);

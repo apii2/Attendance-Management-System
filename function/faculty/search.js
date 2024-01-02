@@ -2,16 +2,16 @@ const FacultyModel = require('../../model/facultyModel');
 
 const searchFaculty = async (req, res) => {
   try {
-    const query = req.params.search;
-    const faculties = query
-      ? await FacultyModel.find({ name: { $regex: new RegExp(query, 'i') } })
-      : await FacultyModel.find();
+    const {search} = req.params;
+    const query = { facultyName: { $regex: new RegExp(`.*${search}.*`, 'i') } };
 
-    return res.status(200).json(faculties);
+    const facultyData = query? await FacultyModel.find(query): await FacultyModel.find();
+
+    return res.status(200).json(facultyData);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
-};
+}
 
 module.exports = searchFaculty;

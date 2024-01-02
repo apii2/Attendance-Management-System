@@ -10,7 +10,7 @@ const update = async(req, res) => {
     return res.status(404).json({ message: "Please provide id" });
     }
     
-    let CourseData = await CourseModel.findById(id);
+    const CourseData = await CourseModel.findById(id);
 
     if(!CourseData){
     return res.status(404).json({ message: "Course with the given id not found!" });
@@ -27,11 +27,11 @@ const update = async(req, res) => {
     if(courseCode){
       CourseData.courseCode = courseCode;
     }
-
     
     await CourseData.save();
 
     return res.status(200).json({ message: "Course updated!" });
+    
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Internal Server Error" });

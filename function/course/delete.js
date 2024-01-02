@@ -2,7 +2,12 @@ const CourseModel = require('../../model/courseModel');
 
 const deleteCourse = async (req, res) => {
   try {
-    const id = req.params.id;
+    const {id} = req.params;
+
+    if(!id){
+      return res.status(404).json({ message: "Invalid request!" });
+    }
+
     const courseData = await CourseModel.deleteOne({ _id: id });
 
     if (courseData.deletedCount === 1) {

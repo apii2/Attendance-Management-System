@@ -21,13 +21,14 @@ const userLogin = async (req, res) => {
     if (passwordMatch) {
       // User authenticated successfully
       // For example, generate a JWT token for the authenticated user
-      const { _id,name, username, email, userType } = foundUser;
+      const { _id,name, username, email, role } = foundUser;
+      
       const payload = {
         userId: _id,
         name,
         username,
         email,
-        userType, // Adding userType to the payload
+        role, 
         ipAddress: req.ip, // Adding IP address to the payload
         userAgent: req.headers["user-agent"], // Adding user-agent to the payload
       };
@@ -36,7 +37,7 @@ const userLogin = async (req, res) => {
         name,
         username,
         email,
-        userType
+        role
       };
 
       // Set the expiration time for the access token (15 minutes)
