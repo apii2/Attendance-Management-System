@@ -10,6 +10,10 @@ const getAllSemister = async(req, res) => {
 
     const semisterData = await SemisterModel.findById(id);
 
+    if(!semisterData) {
+      return res.status(404).json({message:"Semister with the given id not found!"});
+    }
+
     return res.status(200).json(semisterData);
     
   } catch (error) {
