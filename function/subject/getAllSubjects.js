@@ -2,7 +2,7 @@ const SubjectModel = require('../../model/subjectModel');
 
 const getAll = async(req,res) =>{
   try {
-    const subjectData = await SubjectModel.find();
+    const subjectData = await SubjectModel.find().populate('course').populate('teacher').populate('semester').select("-refreshToken -password -token");
 
     return res.status(200).json(subjectData);
 

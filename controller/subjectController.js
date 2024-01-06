@@ -9,3 +9,6 @@ exports.getById = require('../function/subject/getSubjectById');
 exports.search = require('../function/subject/search');
 
 exports.update = require('../function/subject/update');
+
+exports.setTimer = require('../function/subject/setTimer');
+

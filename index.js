@@ -8,7 +8,7 @@ const app = express();
 const UserRouter = require('./route/userRouter');
 const CourseRouter = require('./route/courseRouter');
 const FacultyRouter = require('./route/facultyRouter');
-const SemisterRouter = require('./route/semisterRouter');
+const semesterRouter = require('./route/semesterRouter');
 const SubjectRouter = require('./route/subjectRouter');
 const AttendanceRouter = require('./route/AttendanceRoute');
 
@@ -23,7 +23,7 @@ require('dotenv').config();
 app.use('/users',UserRouter);
 app.use('/course',CourseRouter);
 app.use('/faculty',FacultyRouter);
-app.use('/semister',SemisterRouter);
+app.use('/semester',semesterRouter);
 app.use('/subject',SubjectRouter);
 app.use('/attendance',AttendanceRouter);
 

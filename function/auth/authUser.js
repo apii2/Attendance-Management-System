@@ -19,11 +19,10 @@ const authUser = async (req, res, next) => {
     const requestIp = req.ip;
     const requestAgent = req.headers['user-agent'];
     
-    if(!requestIp==decoded.ipAddress || !requestAgent==decoded.userAgent){
+    if(requestIp !== decoded.ipAddress || requestAgent !== decoded.userAgent){
       return res.status(401).json({ message: "Invalid credentials" });  
     }
     
-    // Attach the decoded payload to the request for later use
     req.user = decoded;
 
     next();

@@ -1,9 +1,10 @@
 const SubjectModel = require('../../model/subjectModel');
+const mongoose = require("mongoose");
 
 const update = async(req,res) =>{
   try{
     const {id} = req.params;
-    const {name,code,courseId,userId,semisterId} = req.body;
+    const {name,code,courseId,teacher,semesterId} = req.body;
     
     if(!id){
       return res.status(404).json({message:"Invalid data!"});
@@ -24,15 +25,15 @@ const update = async(req,res) =>{
     }
   
     if(courseId){
-      SubjectData.courseId = courseId;
+      SubjectData.course = new mongoose.Types.ObjectId(courseId);
     }
   
-    if(userId){
-      SubjectData.userId = userId;
+    if(teacher){
+      SubjectData.teacher = new mongoose.Types.ObjectId(teacher);
     }
   
-    if(semisterId){
-      SubjectData.semisterId = semisterId;
+    if(semesterId){
+      SubjectData.semester = new mongoose.Types.ObjectId(semesterId);
     }
   
     await SubjectData.save();

@@ -13,3 +13,6 @@ exports.changeToTeacher = require('../function/user/changeToTeacher');
 exports.changeToAdmin = require('../function/user/changeToAdmin');
 
 exports.teacherToStudent = require('../function/user/teacherToStudent');
+
+exports.setFaculty = require('../function/user/setFacultyForUser');
+

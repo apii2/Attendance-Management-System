@@ -6,7 +6,7 @@ const update = async(req, res) => {
     const {facultyName}=req.body;
 
     if(!facultyName && !id){
-    return res.status(404).json({ message: "Please provide the semister facultyName and id" });
+    return res.status(404).json({ message: "Please provide the semester facultyName and id" });
     }
 
     const FacultyData = await FacultyModel.findById(id);

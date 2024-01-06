@@ -3,17 +3,17 @@ const mongoose = require('mongoose');
 
 const create = async(req,res) =>{
   try{
-    const {name,code,courseId,userId,semisterId} = req.body;
+    const {name,code,courseId,userId,semesterId} = req.body;
     
-    if(!name || !code || !courseId || !userId || !semisterId) {
+    if(!name || !code || !courseId || !userId || !semesterId) {
       return res.status(404).json({message: "Invalid data!"});
     }
   
     const course = new mongoose.Types.ObjectId(courseId);
-    const semister = new mongoose.Types.ObjectId(semisterId);
+    const semester = new mongoose.Types.ObjectId(semesterId);
     const teacher = new mongoose.Types.ObjectId(userId);
   
-    const newSubject = new SubjectModel({name,code,course,semister,teacher});
+    const newSubject = new SubjectModel({name,code,course,semester,teacher});
     await newSubject.save();
 
     return res.status(200).json({message: "Subject created!"});

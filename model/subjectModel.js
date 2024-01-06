@@ -16,7 +16,7 @@ const subjectSchema = new Schema({
       message: 'Invalid teacher id or user is not a teacher.',
     },
   },
-  semister:{ type:Schema.Types.ObjectId, ref:"Semister"},
+  semester:{ type:Schema.Types.ObjectId, ref:"semester"},
   startTime:{type:Date},
   endTime:{type:Date}
 });

@@ -1,6 +1,6 @@
-const SemisterModel = require('../../model/semisterModel');
+const semesterModel = require('../../model/semesterModel');
 
-const deleteSemister = async (req, res) => {
+const deleteSemester = async (req, res) => {
   try {
     const {id} = req.params;
 
@@ -8,9 +8,9 @@ const deleteSemister = async (req, res) => {
       return res.status(404).json({ message: 'Invalid request!' });
     }
 
-    const semisterData = await SemisterModel.deleteOne({ _id: id });
+    const semesterData = await semesterModel.deleteOne({ _id: id });
 
-    if (semisterData.deletedCount === 1) {
+    if (semesterData.deletedCount === 1) {
       return res.status(200).json({ message: 'Semester deleted successfully' });
     } else {
       return res.status(404).json({ message: 'Semester not found' });
@@ -22,4 +22,4 @@ const deleteSemister = async (req, res) => {
   }
 };
 
-module.exports = deleteSemister;
+module.exports = deleteSemester;

@@ -8,7 +8,7 @@ const getUsersById =async(req,res) =>{
       return res.status(404).json({message:"Invalid request!"});
     }
 
-    const UserData = await UserModel.findById(id);
+    const UserData = await UserModel.findById(id).populate('faculty').populate('course').populate('semester').select("-refreshToken -password -token");
     
     if(!UserData){
       return res.status(404).json({message:"User not found!"});
