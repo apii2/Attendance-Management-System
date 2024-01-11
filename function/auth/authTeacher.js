@@ -1,4 +1,6 @@
+
 const jwt = require('jsonwebtoken');
+const Hashing = require('../service/Hashing');
 
 const authTeacher = async (req, res, next) => {
   try {
@@ -14,7 +16,7 @@ const authTeacher = async (req, res, next) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    const decoded = await Hashing.decrypt(token);
 
     const requestIp = req.ip;
     const requestAgent = req.headers['user-agent'];
@@ -22,8 +24,8 @@ const authTeacher = async (req, res, next) => {
     if(requestIp !== decoded.ipAddress || requestAgent !== decoded.userAgent){
       return res.status(401).json({ message: "Invalid credentials" });
     }
-    
-    if(decoded.role!=="teacher" || decoded.role !== "admin"){
+
+    if(decoded.role !=="teacher" && decoded.role !== "admin"){
       return res.status(401).json({ message: "Invalid credentials" });
     }
     

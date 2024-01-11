@@ -11,6 +11,7 @@ const FacultyRouter = require('./route/facultyRouter');
 const semesterRouter = require('./route/semesterRouter');
 const SubjectRouter = require('./route/subjectRouter');
 const AttendanceRouter = require('./route/AttendanceRoute');
+const AssignmentRouter = require('./route/AssignmentRoute')
 
 
 app.use(cors());
@@ -26,6 +27,7 @@ app.use('/faculty',FacultyRouter);
 app.use('/semester',semesterRouter);
 app.use('/subject',SubjectRouter);
 app.use('/attendance',AttendanceRouter);
+app.use('/assignment',AssignmentRouter);
 
 
 app.listen(process.env.port || 3000, () => {

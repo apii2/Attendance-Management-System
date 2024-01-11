@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
 
-let User = require("../../model/userModel");
+const Hashing = require("../service/Hashing");
+const User = require("../../model/userModel");
 
 const userLogin = async (req, res) => {
   const { user, password } = req.body;
@@ -13,7 +13,7 @@ const userLogin = async (req, res) => {
       return res.status(401).json({ error: "Invalid credentials." });
     }
 
-    const passwordMatch = await bcrypt.compare(password, foundUser.password);
+    const passwordMatch = await Hashing.validate(password, foundUser.password);
 
     if (passwordMatch) {
       const { _id,name, username, email, role,faculty,course,semester } = foundUser;
@@ -41,6 +41,7 @@ const userLogin = async (req, res) => {
       const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRATION });
 
       const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET);
+      foundUser.token = accessToken;
 
       foundUser.refreshToken = refreshToken;
       await foundUser.save();

@@ -14,7 +14,7 @@ const searchSubject = async(req,res) =>{
         },
         {
           code:
-            { 
+            {
               $regex: new RegExp(`.*${search}.*`, 'i')
             }
         }
@@ -22,7 +22,7 @@ const searchSubject = async(req,res) =>{
     };
 
     const searchData = search?
-    await SubjectModel.find(query).populate("course").populate("teacher").populate("semester"):
+    await SubjectModel.find(query).populate("course").populate("teacher","-refreshToken -password -token").populate("semester"):
     await SubjectModel.find();
   
     return res.status(200).json(searchData);

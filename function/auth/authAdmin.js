@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const Hashing = require('../service/Hashing');
 
 const authUser = async (req, res, next) => {
   try {
@@ -14,7 +15,7 @@ const authUser = async (req, res, next) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    const decoded = await Hashing.decrypt(token);
 
     const requestIp = req.ip;
     const requestAgent = req.headers['user-agent'];

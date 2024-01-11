@@ -21,10 +21,6 @@ const refreshJwt = async (req, res) => {
       return res.status(401).json({ error: "Invalid refresh token." });
     }
 
-    if (decodedRefreshToken.exp * 1000 < Date.now()) {
-      return res.status(401).json({ error: "Refresh token has expired. Please login again." });
-    }
-
     const { _id, username, email, role,faculty,course,semester } = user;
     const payload = {
       userId: _id,
@@ -42,7 +38,7 @@ const refreshJwt = async (req, res) => {
     });
 
     const newRefreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET);
-
+    user.token=accessToken;
     user.refreshToken = newRefreshToken;
     await user.save();
 

@@ -1,5 +1,5 @@
-const bcrypt = require('bcrypt');
-const validator = require('validator');
+const Hashing = require('../service/Hashing');
+const Validation = require("../service/Validation");
 const UserModel = require('../../model/userModel')
 
 const Signup = async(req, res) => {
@@ -10,11 +10,26 @@ const Signup = async(req, res) => {
       return res.status(400).json({ message: "Please provide all the requied data!" });
     }
 
-    if (!validator.isEmail(email)) {
+    if (Validation.checkEmail(email)) {
       return res.status(400).json({ message: "Invalid Email Address! Please provide a valid email." });
     }
+
+    if(Validation.checkLength(firstName)){
+      return res.status(400).json({message:"Please provide a valid first name"});
+    }
+    
+    if(Validation.checkLength(lastName)) {
+      return res.status(400).json({message:"Please provide a valid last name"});
+    }
+
+    if(Validation.checkLength(phoneNumber,10,10)){
+      return res.status(400).json({message:"Please provide a valid phone number"});
+    }
+    if(Validation.checkPassword(password)){
+      return res.status(400).json({message:"Password must be one uppercase, one lowercase, one digit and one special character"});
+    }
   
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await Hashing.hash(password);
     const data = {
       firstName, lastName, email, username, password:hashedPassword, dob, phoneNumber, address
     }
@@ -39,5 +54,9 @@ const Signup = async(req, res) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+function checkLength(data,min=3,max=255){
+  return !(data.length >= min && data.length <= max);
+}
 
 module.exports = Signup;

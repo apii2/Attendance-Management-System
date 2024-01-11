@@ -9,7 +9,7 @@ const userSchema = new Schema({
   middleName:{type:String},
   lastName: {type:String,required:true},
   email: {type:String,required:true,unique:true},
-  phoneNumber: {type:Number,required:true,unique:true},
+  phoneNumber: {type:String,required:true,unique:true},
   dob: {type:Date,required:true},
   address: {type:String,required:true},
 

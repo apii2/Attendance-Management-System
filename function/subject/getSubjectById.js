@@ -8,7 +8,7 @@ const getById = async(req,res) =>{
       return res.status(404).json({ message: "Invalid request" });
     }
 
-    const subjectData = await SubjectModel.findById(id).populate('course').populate('teacher').populate('semester').select("-refreshToken -password -token");
+    const subjectData = await SubjectModel.findById(id).populate('course').populate('teacher',"-refreshToken -password -token").populate('semester');
 
     return res.status(200).json(subjectData);
     
