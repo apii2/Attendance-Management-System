@@ -10,7 +10,9 @@ const assignmentSchema = new Schema({
       checked:{type:Boolean,default:false},
      }
   ],
+  courseID:{type:Schema.Types.ObjectId,ref:"Course"},
   subjectID:{type:Schema.Types.ObjectId,ref:"Subject"},
+  semesterID:{type:Schema.Types.ObjectId,ref:"Semester"},
   createdAt:{type:Date,default:Date.now()},
   createdBy:{type: Schema.Types.ObjectId, ref: 'User'}
 });

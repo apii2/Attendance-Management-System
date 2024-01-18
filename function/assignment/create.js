@@ -1,6 +1,6 @@
 const subjectModel = require('../../model/subjectModel');
-const userModel = require('../../model/userModel')
-const assignmentModel = require("../../model/assignmentModel")
+const userModel = require('../../model/userModel');
+const assignmentModel = require("../../model/assignmentModel");
 
 const create = async(req,res)=>{
   try{
@@ -31,6 +31,8 @@ const create = async(req,res)=>{
       title,
       deadline,
       submittedUser:userObjects,
+      courseID:subjectObject.course,
+      semester:subjectObject.semester,
       subjectID,
       createdBy:user.userId
     }

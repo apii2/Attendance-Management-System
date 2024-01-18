@@ -32,9 +32,11 @@ const setTimer = async (req, res) => {
   }
   try {
     const subjectObject = await subjectModel.findById(id);
+
     subjectObject.startTime = startingTime;
     subjectObject.endTime = endingTime;
     await subjectObject.save();
+
     return res.status(200).json({ message: "Added successfully" });
   } catch (error) {
     console.log(error);

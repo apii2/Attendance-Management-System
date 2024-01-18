@@ -9,6 +9,6 @@ router.get('/search/:search',semesterController.search);
 router.put('/update/:id',AuthController.adminAuth,semesterController.update);
 router.post('/delete/:id',AuthController.adminAuth,semesterController.delete);
 router.get('/all',semesterController.getAll);
-router.get('/:id',semesterController.getById);
+router.get('/id/:id',semesterController.getById);
 
 module.exports = router;

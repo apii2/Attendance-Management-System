@@ -1,16 +1,16 @@
 const ip = require("ip");
 const mongoose = require("mongoose");
+
 const Holiday = require("../../model/HolidayModel");
 const Attendance = require("../../model/attendanceModel");
 const Subject = require("../../model/subjectModel");
 
 const attend = async (req, res) => {
-  // Retrieve the client's IP address from the request object
   const user = req.user;
   const { subjectID } = req.params;
-  // Check if the client's IP address is local or public
+
   if (!isLocalIp(user.ipAddress)) {
-    return res.status(401).json({ message: "Come to college to attend!" });
+    return res.status(401).json({ message: "Connect to college's network to attend!" });
   }
 
   let data = {
@@ -21,24 +21,20 @@ const attend = async (req, res) => {
   try {
     const subjectObject = await Subject.findById(subjectID);
     if (!subjectObject) {
-      return res.status(404).json({ message: "Enteer valid subject" });
+      return res.status(404).json({ message: "Enter valid subject" });
     }
 
     if(user.role === "teacher" && user.userId !== subjectObject.teacher){
         return res.status(404).json({ message: "You cannot attend this class" });
-    }else{
-      if (
+    }else if (
         subjectObject.course !== user.course ||
         subjectObject.semester !== user.semester
       ) {
         return res.status(404).json({ message: "You cannot attend this class" });
       }
-    }
 
     if (!subjectObject.startTime || !subjectObject.endTime) {
-      return res
-        .status(404)
-        .json({ message: "Subject timing has not been defined" });
+      return res.status(404).json({ message: "Subject timing has not been defined" });
     }
 
     if (!checkRange(subjectObject.startTime, subjectObject.endTime)) {
@@ -53,7 +49,6 @@ const attend = async (req, res) => {
   //TODO : check if the attened time is within the time range
 
   try {
-    // Check if the current date is a holiday
     const holidayDate = await Holiday.findOne({ date: new Date() });
 
     if (holidayDate) {
@@ -61,14 +56,13 @@ const attend = async (req, res) => {
     }
 
     if (!user.faculty || !user.course || !user.semester) {
-      return res.status(401).json({message: "Please contact admin to get assigned to our course.",});
+      return res.status(401).json({message: "Please contact admin to get assigned to our course."});
     }
     
-    console.log(data);
     const newAttendance = new Attendance(data);
     await newAttendance.save();
 
-    return res.status(200).json({ message: "you are present." });
+    return res.status(200).json({ message: "Attendance done successfully!" });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Internal Server Error!" });

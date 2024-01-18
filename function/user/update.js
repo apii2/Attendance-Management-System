@@ -1,5 +1,4 @@
 const userModel = require('../../model/userModel');
-const bcrypt = require('bcrypt');
 const Hashing = require('../service/Hashing');
 
 const update = async(req,res) =>{
@@ -15,7 +14,7 @@ const update = async(req,res) =>{
       return res.status(404).json({message:"Invalid access!"});
     }
 
-    const {username, password, firstName,middleName,lastName,email, phoneNumber, dob,address} = req.body;
+    const {username, password, firstName, middleName, lastName, email, phoneNumber, dob, address} = req.body;
 
     const userData = await userModel.findById(id);
 

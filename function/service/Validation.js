@@ -1,7 +1,6 @@
 const validator = require('validator');
 
 class Validation{
-
   static checkLength(data,min=3,max=255){
     return !(data.length>=min && data.length<=max);
   }
@@ -20,7 +19,6 @@ class Validation{
       /[!@#$%^&*(),.?":{}|<>]/.test(password)
       )  
   }
-
 }
 
 module.exports = Validation;

@@ -1,17 +1,19 @@
 const jwt = require("jsonwebtoken");
-const User = require("../../model/userModel");
+const Hashing = require("../../function/service/Hashing");
+const Usermodel = require("../../model/userModel");
 
 const refreshJwt = async (req, res) => {
   const { refreshToken } = req.body;
 
   try {
-    const decodedRefreshToken = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const decodedRefreshToken = Hashing.decryptRefresh(refreshToken);
+    console.log(decodedRefreshToken)
 
     if (!decodedRefreshToken.userId || !decodedRefreshToken.userAgent) {
       return res.status(401).json({ error: "Invalid refresh token." });
     }
 
-    const user = await User.findById(decodedRefreshToken.userId);
+    const user = await Usermodel.findById(decodedRefreshToken.userId);
 
     if (!user) {
       return res.status(404).json({ error: "User not found." });
@@ -21,25 +23,31 @@ const refreshJwt = async (req, res) => {
       return res.status(401).json({ error: "Invalid refresh token." });
     }
 
-    const { _id, username, email, role,faculty,course,semester } = user;
+    const { _id, firstName, middleName, lastName, username, email, role,faculty,course,semester } = user;
+
     const payload = {
       userId: _id,
+      firstName,
+      middleName,
+      lastName,
       username,
       email,
-      role,
       faculty,
       course,
       semester,
-      userAgent: req.headers["user-agent"], 
+      role, 
       ipAddress: req.ip, 
+      userAgent: req.headers["user-agent"],
     };
+
+
     const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
       expiresIn: process.env.ACCESS_TOKEN_EXPIRATION 
     });
-
     const newRefreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET);
     user.token=accessToken;
     user.refreshToken = newRefreshToken;
+
     await user.save();
 
     res.status(200).json({ accessToken, refreshToken: newRefreshToken });

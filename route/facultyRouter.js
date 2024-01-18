@@ -8,7 +8,7 @@ router.post('/create',AuthController.adminAuth,FacultyController.create);
 router.post('/delete/:id',AuthController.adminAuth,FacultyController.delete);
 router.put('/update/:id',AuthController.adminAuth,FacultyController.update);
 router.get('/all',FacultyController.getAll);
-router.get('/:id',FacultyController.getById);
+router.get('/id/:id',FacultyController.getById);
 router.get('/search/:search',FacultyController.search);
 
 module.exports = router;

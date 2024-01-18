@@ -20,7 +20,7 @@ const changeToStudent = async(req,res) => {
 
     await UserData.save();
     
-    return res.status(200).json({message:"user role updated from teacher successfully!"});
+    return res.status(200).json({message:"User role updated from teacher to student successfully!"});
 
   } catch(error) {
     console.log(error);

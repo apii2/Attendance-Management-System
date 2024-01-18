@@ -32,7 +32,7 @@ const update = async(req,res) =>{
 
     await Data.save();
 
-    return res.status(200).json(Data);
+    return res.status(200).json({message:"Assignment updated!"});
   } catch(error) {
     console.log(error);
     return res.status(500).json({message :"Internal Server Error!"});

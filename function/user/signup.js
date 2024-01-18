@@ -4,9 +4,9 @@ const UserModel = require('../../model/userModel')
 
 const Signup = async(req, res) => {
   try {
-    const { firstName, middleName, lastName, email, username, password, dob, phoneNumber, address } = req.body;
+    const {username, password, firstName, middleName, lastName, email, phoneNumber, dob, address } = req.body;
 
-    if (!firstName || !lastName || !email || !username || !password || !dob || !phoneNumber || !address) {
+    if (!username || !password || !firstName || !lastName || !email || !phoneNumber || !dob || !address) {
       return res.status(400).json({ message: "Please provide all the requied data!" });
     }
 
@@ -18,6 +18,10 @@ const Signup = async(req, res) => {
       return res.status(400).json({message:"Please provide a valid first name"});
     }
     
+    if(Validation.checkLength(middleName)){
+      return res.status(400).json({message:"Please provide a valid middle name"});
+    }
+    
     if(Validation.checkLength(lastName)) {
       return res.status(400).json({message:"Please provide a valid last name"});
     }
@@ -25,6 +29,7 @@ const Signup = async(req, res) => {
     if(Validation.checkLength(phoneNumber,10,10)){
       return res.status(400).json({message:"Please provide a valid phone number"});
     }
+
     if(Validation.checkPassword(password)){
       return res.status(400).json({message:"Password must be one uppercase, one lowercase, one digit and one special character"});
     }
@@ -37,26 +42,19 @@ const Signup = async(req, res) => {
       data.middleName= middleName;
     }
 
-    // to check if the username or email already exists in the system or not 
     const checkUsernameExists = await UserModel.findOne({ $or: [{ username: username }, { email: email }] });
     if(checkUsernameExists){
       return res.status(401).json({"message":"Username or email already exists"});
     }
 
-    //saving new user in the usermodel in mongodb
     const newUser = new UserModel(data);
     await newUser.save();
 
-    //return success message after all the process are done
     return res.status(200).json({ message: "Signup Successful!" });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
-function checkLength(data,min=3,max=255){
-  return !(data.length >= min && data.length <= max);
-}
 
 module.exports = Signup;

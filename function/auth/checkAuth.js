@@ -1,4 +1,3 @@
-const jwt = require('jsonwebtoken');
 const Hashing = require('../service/Hashing');
 
 const checkAuth = async (req, res, next) => {
@@ -6,7 +5,7 @@ const checkAuth = async (req, res, next) => {
     const authHeader = req.headers["authorization"];
 
     if (!authHeader) {
-      req.user = null;
+      req.user = {};
       console.log(authHeader);
       next();
       return;
@@ -18,7 +17,7 @@ const checkAuth = async (req, res, next) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const decoded = await Hashing.decrypt(token);
+    const decoded = Hashing.decrypt(token);
 
     const requestIp = req.ip;
     const requestAgent = req.headers['user-agent'];
