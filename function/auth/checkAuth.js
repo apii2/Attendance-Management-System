@@ -6,7 +6,6 @@ const checkAuth = async (req, res, next) => {
 
     if (!authHeader) {
       req.user = {};
-      console.log(authHeader);
       next();
       return;
     }

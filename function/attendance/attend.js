@@ -24,13 +24,15 @@ const attend = async (req, res) => {
       return res.status(404).json({ message: "Enter valid subject" });
     }
 
-    if(user.role === "teacher" && user.userId !== subjectObject.teacher){
-        return res.status(404).json({ message: "You cannot attend this class" });
+    if(user.role === "teacher" && user.userId !== subjectObject.teacher.toString()){
+        console.log(subjectObject.teacher.toString());
+        console.log(user.userId);
+        return res.status(404).json({ message: "You cannot attend this class.." });
     }else if (
-        subjectObject.course !== user.course ||
-        subjectObject.semester !== user.semester
+        subjectObject.course.toString() !== user.course ||
+        subjectObject.semester.toString() !== user.semester
       ) {
-        return res.status(404).json({ message: "You cannot attend this class" });
+        return res.status(404).json({ message: "You cannot attend this class;;" });
       }
 
     if (!subjectObject.startTime || !subjectObject.endTime) {
@@ -45,8 +47,6 @@ const attend = async (req, res) => {
   } catch (err) {
     return res.status(404).json({ message: "Provide a valid id" });
   }
-
-  //TODO : check if the attened time is within the time range
 
   try {
     const holidayDate = await Holiday.findOne({ date: new Date() });
@@ -69,14 +69,11 @@ const attend = async (req, res) => {
   }
 };
 
-// Function to check if an IP address is local
 const isLocalIp = (ipAddress) => {
-  // Check for loopback addresses (::1 and 127.0.0.1)
   if (ipAddress === "::1" || ipAddress === "127.0.0.1") {
     return true;
   }
 
-  // Check for other private IP addresses
   try {
     return ip.isPrivate(ipAddress);
   } catch (error) {
@@ -89,17 +86,14 @@ const checkRange = (startTime, endTime) => {
   const timeStartRange = new Date(startTime);
   const timeEndRange = new Date(endTime);
 
-  // Extract hours and minutes from the current date
   const currentHour = currentDate.getHours();
   const currentMinute = currentDate.getMinutes();
 
-  // Extract hours and minutes from the start and end ranges
   const startHour = timeStartRange.getHours();
   const startMinute = timeStartRange.getMinutes();
   const endHour = timeEndRange.getHours();
   const endMinute = timeEndRange.getMinutes();
 
-  // Check if current time is within the range
   return (
     (currentHour > startHour ||
       (currentHour === startHour && currentMinute >= startMinute)) &&

@@ -22,7 +22,7 @@ const update = async(req,res) =>{
       return res.status(404).json({message:"User not found!"});
     }
 
-    if(username){
+    if(username && user.role==="admin"){
       userData.username = username;
     }
 

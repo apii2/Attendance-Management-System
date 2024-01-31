@@ -10,7 +10,7 @@ const userLogin = async (req, res) => {
     const foundUser = await User.findOne({ $or: [{ username: user }, { email: user }] });
 
     if (!foundUser) {
-      return res.status(401).json({ error: "Invalid credentials." });
+      return res.status(401).json({ error: "Invalid credentials.." });
     }
 
     const passwordMatch = await Hashing.validate(password, foundUser.password);
@@ -56,7 +56,7 @@ const userLogin = async (req, res) => {
 
       return res.status(200).json({ message: "Authenticated", accessToken, refreshToken,data });
     } else {
-      return res.status(401).json({ error: "Invalid credentials." });
+      return res.status(401).json({ error: "Invalid credentialsss." });
     }
   } catch (error) {
     console.error(error);

@@ -14,7 +14,6 @@ const SubjectRouter = require('./route/subjectRouter');
 const AttendanceRouter = require('./route/AttendanceRoute');
 const AssignmentRouter = require('./route/AssignmentRoute')
 
-
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());

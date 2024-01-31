@@ -6,7 +6,6 @@ const attendanceSchema = new Schema({
   semesterID: {type:Schema.Types.ObjectId,ref:"semester"},
   subjectID:{type:Schema.Types.ObjectId,ref:"Subject"},
   attendedAt:{type:Date,default:Date.now()},
-  
 });
 
 const Attendance = mongoose.model('Attendance', attendanceSchema);
