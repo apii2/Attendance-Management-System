@@ -4,16 +4,21 @@ const path = require('path');
 const crypto = require('crypto')
 const fs = require('fs').promises;
 
-const Generate = async (req, res) => {
+const GenerateByDate = async (req, res) => {
   try {
-    const { subjectID, semesterID } = req.body;
+    const { subjectID, semesterID, startDate, endDate } = req.body;
+    startDateInput = new Date(startDate);
+    endDateInput = new Date(endDate);
+
+    if(endDateInput<startDateInput){
+      return res.status(403).json({message: "Enter valid date range!"});
+    }
+
     const date = new Date();
-    const days = getHeaders(date.getMonth(), date.getFullYear());
-    const startDate = new Date(date.getFullYear(), date.getMonth(), 1);
-    const endDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    const days = getHeaders(startDateInput, endDateInput);
 
     const attendanceData = await AttendanceModel.find({ subjectID, semesterID,
-      attendedAt: { $gte: startDate, $lte: endDate }
+      attendedAt: { $gte: startDateInput, $lte: endDateInput }
      })
       .populate('userID', 'firstName lastName email username');
 
@@ -30,9 +35,7 @@ const Generate = async (req, res) => {
         });
         data.push([j.userID, attended]);
       }
-    });
-    
-    
+    });  
 
     const workbook = new excelJS.Workbook();
     const worksheetName = `Attendance_${date.getTime()}_${crypto.randomBytes(6).toString('hex')}`;
@@ -62,9 +65,9 @@ const Generate = async (req, res) => {
   }
 };
 
-function getHeaders(month, year) {
-  const startDate = new Date(year, month, 1);
-  const endDate = new Date(year, month + 1, 0);
+function getHeaders(start, end) {
+  const startDate = new Date(start);
+  const endDate = new Date(end);
   const dateArray = [];
 
   for (let date = startDate; date <= endDate; date.setDate(date.getDate() + 1)) {
@@ -96,4 +99,4 @@ function getAttendanceForRow(attendedAt, days) {
   return attendanceMap;
 }
 
-module.exports = Generate;
+module.exports = GenerateByDate;

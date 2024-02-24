@@ -47,15 +47,12 @@ const getAssignmentData = async (req, res) => {
       hour: '2-digit',
       minute: '2-digit',
       second: '2-digit',
-    }).replace(/[\/:]/g, '_'); // Replace slashes with underscores
+    }).replace(/[\/:]/g, '_'); 
 
     const folderPath = path.resolve(__dirname, '../../sheets');
-    console.log("FolderPath:", folderPath); // Log folderPath
 
-    // Create the directory if it doesn't exist
     await fs.mkdir(folderPath, { recursive: true });
 
-    // Log that the directory was created successfully
     console.log("Directory created successfully.");
 
     const filePath = path.resolve(folderPath, `assignment_${formattedDate}.xlsx`);

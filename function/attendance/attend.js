@@ -27,12 +27,12 @@ const attend = async (req, res) => {
     if(user.role === "teacher" && user.userId !== subjectObject.teacher.toString()){
         console.log(subjectObject.teacher.toString());
         console.log(user.userId);
-        return res.status(404).json({ message: "You cannot attend this class.." });
+        return res.status(404).json({ message: "You cannot attend this class." });
     }else if (
         subjectObject.course.toString() !== user.course ||
         subjectObject.semester.toString() !== user.semester
       ) {
-        return res.status(404).json({ message: "You cannot attend this class;;" });
+        return res.status(404).json({ message: "You cannot attend this class.." });
       }
 
     if (!subjectObject.startTime || !subjectObject.endTime) {
@@ -40,7 +40,7 @@ const attend = async (req, res) => {
     }
 
     if (!checkRange(subjectObject.startTime, subjectObject.endTime)) {
-      return res.status(401).json({ message: "You have missed the class" });
+      return res.status(401).json({ message: "You have missed the class." });
     }
 
     data.semesterID= new mongoose.Types.ObjectId(subjectObject.semester);

@@ -8,6 +8,9 @@ router.post("/attend/:subjectID",AuthController.userAuth,AttendanceController.at
 router.post("/generate",
 // AuthController.userAuth,
 AttendanceController.generate);
+router.post("/generate/date",
+// AuthController.userAuth,
+AttendanceController.generateByDate);
 
 
 module.exports = router;
