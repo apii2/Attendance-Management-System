@@ -12,3 +12,4 @@ exports.update = require('../function/subject/update');
 
 exports.setTimer = require('../function/subject/setTimer');
 
+exports.generate = require('../function/subject/generate');

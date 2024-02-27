@@ -11,6 +11,8 @@ router.get('/id/:id',SubjectController.getById);
 router.get('/search/:search',SubjectController.search);
 router.put('/update/:id',AuthController.adminAuth,SubjectController.update);
 router.put('/time/:id',AuthController.adminAuth,SubjectController.setTimer);
+router.get('/generate', AuthController.userAuth,SubjectController.generate);
+
 
 
 module.exports = router;
