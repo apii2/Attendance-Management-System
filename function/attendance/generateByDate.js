@@ -18,6 +18,7 @@ const GenerateByDate = async (req, res) => {
     const days = getHeaders(startDateInput, endDateInput);
 
     const attendanceData = await AttendanceModel.find({ subjectID, semesterID,
+      role: 'student',
       attendedAt: { $gte: startDateInput, $lte: endDateInput }
      })
       .populate('userID', 'firstName lastName email username');

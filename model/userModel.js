@@ -17,6 +17,8 @@ const userSchema = new Schema({
   course: { type: Schema.Types.ObjectId, ref: 'Course' },
   semester:{type:Schema.Types.ObjectId,ref:"semester"},
 
+  active:{type:Boolean,default:false},
+
   createdAt:{type:Date,default:Date.now},
   token:{type:String},
   refreshToken:{type:String}

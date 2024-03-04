@@ -13,9 +13,13 @@ const Generate = async (req, res) => {
     const endDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
 
     const attendanceData = await AttendanceModel.find({ subjectID, semesterID,
-      attendedAt: { $gte: startDate, $lte: endDate }
+      attendedAt: { $gte: startDate, $lte: endDate },
+      role:"student"
      })
       .populate('userID', 'firstName lastName email username');
+
+      let totalPresent = attendanceData.length;
+
 
     let data = [];
 
@@ -31,6 +35,8 @@ const Generate = async (req, res) => {
         data.push([j.userID, attended]);
       }
     });
+
+    data.length;
     
     
 

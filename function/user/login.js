@@ -16,6 +16,10 @@ const userLogin = async (req, res) => {
     const passwordMatch = await Hashing.validate(password, foundUser.password);
 
     if (passwordMatch) {
+      if(!foundUser.active && foundUser.role !== 'admin'){
+        return res.status(403).json({error:"This user has not been activated"});
+      }
+
       const { _id, firstName, middleName, lastName, username, email, role, faculty, course, semester } = foundUser;
       
       const payload = {

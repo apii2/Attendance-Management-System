@@ -16,6 +16,8 @@ router.put('/change/teacher/:id',AuthController.adminAuth,UserController.changeT
 router.put('/change/admin/:id',AuthController.adminAuth,UserController.changeToAdmin);
 router.put('/change/from/teacher/:id',AuthController.adminAuth,UserController.teacherToStudent);
 router.put('/faculty/assign/:id',AuthController.adminAuth,UserController.setFaculty);
+router.put('/activate/:id',AuthController.adminAuth,UserController.activate);
+
 
 
 module.exports = router;
