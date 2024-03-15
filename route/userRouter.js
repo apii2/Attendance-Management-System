@@ -18,6 +18,4 @@ router.put('/change/from/teacher/:id',AuthController.adminAuth,UserController.te
 router.put('/faculty/assign/:id',AuthController.adminAuth,UserController.setFaculty);
 router.put('/activate/:id',AuthController.adminAuth,UserController.activate);
 
-
-
 module.exports = router;

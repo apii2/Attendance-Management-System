@@ -12,5 +12,4 @@ router.post("/generate/date",
 // AuthController.userAuth,
 AttendanceController.generateByDate);
 
-
 module.exports = router;

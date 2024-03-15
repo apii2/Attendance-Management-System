@@ -1,0 +1,8 @@
+{
+  "excellent":{"score":90,"remark":"Excellent"},
+  "good":{"score":80,"remark":"Good"},
+  "average":{"score":70,"remark":"Average"},
+  "below_average":{"score":50,"remark":"Below Average"},
+  "poor":{"score":30,"remark":"Poor"},
+  "very_poor":{"score":0,"remark":"Very Poor"}
+}

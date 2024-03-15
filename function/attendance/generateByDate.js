@@ -1,4 +1,5 @@
 const AttendanceModel = require('../../model/attendanceModel');
+const remark = require('../../remarks.json');
 const excelJS = require('exceljs');
 const path = require('path');
 const crypto = require('crypto')
@@ -16,14 +17,16 @@ const GenerateByDate = async (req, res) => {
 
     const date = new Date();
     const days = getHeaders(startDateInput, endDateInput);
+    const tot = days.length;
 
     const attendanceData = await AttendanceModel.find({ subjectID, semesterID,
-      role: 'student',
       attendedAt: { $gte: startDateInput, $lte: endDateInput }
      })
       .populate('userID', 'firstName lastName email username');
 
     let data = [];
+    let tot_remarks = 0;
+    let nume = 0;
 
     attendanceData.forEach((j) => {
       if (!data.some((item) => item[0] === j.userID)) {
@@ -34,26 +37,64 @@ const GenerateByDate = async (req, res) => {
             attended = [...attended, attendedAt];
           }
         });
-        data.push([j.userID, attended]);
+
+        const remarks = attended.length/tot;
+        tot_remarks += remarks;
+        let score = '';
+
+        for (const [grade, minScore] of Object.entries(remark)) {
+          if ((remarks*100) >= minScore.score) {
+            score = minScore.remark;
+            nume += (remarks * minScore.score);
+            break;
+          }
+        }
+
+        data.push([j.userID, attended, score]);
       }
-    });  
+    });
+
+    const mean = nume/tot_remarks;
+    let total_remark = '';
+    for (const [grade, minScore] of Object.entries(remark)) {
+      if (mean >= minScore.score) {
+        total_remark = minScore.remark;
+        break;
+      }
+    }
+    data = data.filter(record => record[0] !== null);
+
 
     const workbook = new excelJS.Workbook();
     const worksheetName = `Attendance_${date.getTime()}_${crypto.randomBytes(6).toString('hex')}`;
     const worksheet = workbook.addWorksheet(worksheetName.substring(0, 31));
 
-    const headers = ['S no.', 'First Name', 'Last Name', 'Email Id', ...days];
+    const headers = ['S no.', 'First Name', 'Last Name', 'Email Id', ...days,'Remark'];
     worksheet.columns = headers.map((header) => ({ header, key: header, width: 20 }));
 
     data.forEach((attendanceRecord, index) => {
+      if(!attendanceRecord[0]){
+        return;
+      }
       const userRow = {
         'S no.': index + 1,
-        'First Name': attendanceRecord[0].firstName,
-        'Last Name': attendanceRecord[0].lastName,
-        'Email Id': attendanceRecord[0].email,
+        'First Name': attendanceRecord[0]?.firstName,
+        'Last Name': attendanceRecord[0]?.lastName,
+        'Email Id': attendanceRecord[0]?.email,
         ...getAttendanceForRow(attendanceRecord[1], days),
+        "Remark":attendanceRecord[2]
       };
       worksheet.addRow(userRow);
+    });
+    worksheet.addRow({
+      'S no.': "",
+      'First Name': "Total Mean",
+      'Last Name': mean,
+    });
+    worksheet.addRow({
+      'S no.': "",
+      'First Name': "Total Remark",
+      'Last Name': total_remark,
     });
 
     const filePath = path.join(__dirname, `../../sheets/attendance_${worksheetName}.xlsx`);

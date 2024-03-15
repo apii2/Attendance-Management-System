@@ -42,9 +42,9 @@ const Signup = async(req, res) => {
       data.middleName= middleName;
     }
 
-    const checkUsernameExists = await UserModel.findOne({ $or: [{ username: username }, { email: email }] });
+    const checkUsernameExists = await UserModel.findOne({ $or: [{ username: username }, { email: email }, {phoneNumber: phoneNumber}] });
     if(checkUsernameExists){
-      return res.status(401).json({"message":"Username or email already exists"});
+      return res.status(401).json({"message":"Username, email or phone number already exists"});
     }
 
     const newUser = new UserModel(data);
