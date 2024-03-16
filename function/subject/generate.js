@@ -19,11 +19,11 @@ const Generate = async(req,res) => {
     sub.forEach(subject => {
       const courseIDToString = subject.course.toString();
       if(courseIDToString == courseID.toString()){
-        subs = subject.name;
+        subs = [...subs,subject];
       }
     });
 
-    return res.status(200).json({message: "The list of subjects",subs});
+    return res.status(200).json(subs);
 
   } catch(error) {
     console.log(error);
