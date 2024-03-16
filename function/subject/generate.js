@@ -6,8 +6,11 @@ const Generate = async(req,res) => {
   try {
     const user = req.user;
 
-    const courseID = new mongoose.Types.ObjectId(user.course);
-    const semesterID = new mongoose.Types.ObjectId(user.semester);
+    if(!user.course || !user.semester){
+      return res.status(404).json({error:"Please enter valid course and semester!"});
+    }
+    const courseID = user.course;
+    const semesterID = user.semester;
 
 
     const sub = await subjectModel.find({semester: semesterID});
