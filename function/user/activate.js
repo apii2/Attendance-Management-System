@@ -14,7 +14,8 @@ const activate = async(req,res) => {
     userData.active = active;
     await userData.save();
 
-    return res.status(200).json({message :"User activated successfully!"});
+    const responseMsg = active?"activated":"de-activated";
+    return res.status(200).json({message :`User ${responseMsg} successfully!`});
   } catch(error) {
     console.log(error);
     return res.status(505).json({error: "Internal Server Error!"});

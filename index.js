@@ -7,6 +7,7 @@ const app = express();
 
 const AuthController = require('./controller/AuthController');
 const UserRouter = require('./route/userRouter');
+const TeacherRouter = require('./route/TeacherRoute');
 const CourseRouter = require('./route/courseRouter');
 const FacultyRouter = require('./route/facultyRouter');
 const SemesterRouter = require('./route/semesterRouter');
@@ -24,6 +25,7 @@ app.use('/sheets',AuthController.teacherAuth,express.static("./sheets"));
 require('dotenv').config();
 
 app.use('/users',UserRouter);
+app.use('/teachers',TeacherRouter);
 app.use('/course',CourseRouter);
 app.use('/faculty',FacultyRouter);
 app.use('/semester',SemesterRouter);

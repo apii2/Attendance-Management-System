@@ -25,15 +25,15 @@ const update = async(req,res) =>{
     }
   
     if(courseId){
-      SubjectData.course = new mongoose.Types.ObjectId(courseId);
+      SubjectData.course = courseId;
     }
   
     if(teacher){
-      SubjectData.teacher = new mongoose.Types.ObjectId(teacher);
+      SubjectData.teacher = teacher;
     }
   
     if(semesterId){
-      SubjectData.semester = new mongoose.Types.ObjectId(semesterId);
+      SubjectData.semester = semesterId;
     }
   
     await SubjectData.save();

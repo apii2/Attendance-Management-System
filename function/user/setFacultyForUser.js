@@ -21,9 +21,9 @@ const setFacultyForUser = async(req,res) =>{
       return res.status(404).json({message:"User with the given id not found!"});
     }
 
-    UserData.faculty= new mongoose.Types.ObjectId(facultyId);
-    UserData.course= new mongoose.Types.ObjectId(courseId);
-    UserData.semester= new mongoose.Types.ObjectId(semesterId);
+    UserData.faculty= facultyId;
+    UserData.course= courseId;
+    UserData.semester= semesterId;
     await UserData.save();
 
     return res.status(200).json({message:"User details has been set"});

@@ -17,7 +17,7 @@ const update = async(req, res) => {
     }
 
     if(faculty){
-      CourseData.faculty = new mongoose.Types.ObjectId(faculty);
+      CourseData.faculty = faculty;
     }
 
     if(courseName){
