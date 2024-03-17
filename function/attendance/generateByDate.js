@@ -37,11 +37,11 @@ const GenerateByDate = async (req, res) => {
             attended = [...attended, attendedAt];
           }
         });
-
+        
         const remarks = attended.length/tot;
         tot_remarks += remarks;
         let score = '';
-
+        
         for (const [grade, minScore] of Object.entries(remark)) {
           if ((remarks*100) >= minScore.score) {
             score = minScore.remark;
@@ -49,11 +49,11 @@ const GenerateByDate = async (req, res) => {
             break;
           }
         }
-
+        
         data.push([j.userID, attended, score]);
       }
     });
-
+    
     const mean = nume/tot_remarks;
     let total_remark = '';
     for (const [grade, minScore] of Object.entries(remark)) {
